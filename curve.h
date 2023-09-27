@@ -3,79 +3,87 @@
 #include <tuple>
 
 // not optimized for case z = 0
-template<bool isTransposite = false>
+template<typename T,bool isTransposite = false>
 struct vec3{
-	double x;
-	double y;
-	double z;
+	T x;
+	T y;
+	T z;
 };
 
+template<typename T = double>
 class Curve{
 public:
-        virtual vec3<> point(double t) = 0;
-        virtual vec3<true> derivative(double t) = 0;
+	Curve() {
+		static_assert(std::is_floating_point_v<T>, "only float types");
+	}
+
+        virtual vec3<T> point(T t) = 0;
+        virtual vec3<T,true> derivative(T t) = 0;
 
         virtual ~Curve() = default;
 };
 
-class Circle : public Curve{
+template<typename T = double>
+class Circle : public Curve<T>{
 public:
-        Circle(double radius) : m_radius(radius){
+        Circle(T radius) : m_radius(radius){
                 if(m_radius <= 0){
                         throw std::invalid_argument("arguments must be positive");
                 }
         };
 
-        vec3<> point(double t) override;
-        vec3<true> derivative(double t) override;
+        vec3<T> point(T t) override;
+        vec3<T,true> derivative(T t) override;
 
-	const double radius(){return m_radius;}
+	const T radius(){return m_radius;}
 
 	friend bool operator<(const Circle& l, const Circle& r){
 		return l.m_radius < r.m_radius;
 	}
 private:
-        double m_radius;
+        T m_radius;
 };
 
-class Ellipse : public Curve{
+template<typename T = double>
+class Ellipse : public Curve<T>{
 public:
-        Ellipse(double radius1, double radius2) : m_radius1(radius1),m_radius2(radius2){
+        Ellipse(T radius1, T radius2) : m_radius1(radius1),m_radius2(radius2){
                 if(m_radius1 <= 0 && m_radius1 <= 0){
                         throw std::invalid_argument("arguments must be positive");
                 }
         };
 
-        vec3<> point(double t) override;
-        vec3<true> derivative(double t) override;
+        vec3<T> point(T t) override;
+        vec3<T,true> derivative(T t) override;
 
-	const double radius1(){return m_radius1;}
-	const double radius2(){return m_radius2;}
+	const T radius1(){return m_radius1;}
+	const T radius2(){return m_radius2;}
 
 	friend bool operator<(const Ellipse& l, const Ellipse& r){
 		return l.m_radius1+l.m_radius2 < r.m_radius1+r.m_radius2;
 	}
 private:
-        double m_radius1, m_radius2;
+        T m_radius1, m_radius2;
 };
 
-class Helix : public Curve{
+template<typename T = double>
+class Helix : public Curve<T>{
 public:
-        Helix(double radius, double pitch): m_radius(radius),m_pitch(pitch){ // slope = radius/pitch
+        Helix(T radius, T pitch): m_radius(radius),m_pitch(pitch){ // slope = radius/pitch
                 if(m_radius <= 0 && m_pitch <= 0){
                         throw std::invalid_argument("arguments must be positive");
                 }
         };
 
-        vec3<> point(double t) override;
-        vec3<true> derivative(double t) override;
+        vec3<T> point(T t) override;
+        vec3<T,true> derivative(T t) override;
 
-	const double radius(){return m_radius;}
-	const double pitch(){return m_pitch;}
+	const T radius(){return m_radius;}
+	const T pitch(){return m_pitch;}
 
 	friend bool operator<(const Helix& l, const Helix& r){
 		return std::tie(l.m_radius,l.m_pitch) < std::tie(r.m_radius,r.m_pitch);
 	}
 private:
-        double m_radius, m_pitch;
+        T m_radius, m_pitch;
 };

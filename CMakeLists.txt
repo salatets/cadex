@@ -6,4 +6,4 @@ project(Curves VERSION 0.1
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED On)
 
-add_executable(test main.cpp curve.h curve.cpp)
+add_executable(test main.cpp curve.h curve.ipp)
