@@ -8,6 +8,7 @@
 #include <cstring>
 #define _USE_MATH_DEFINES 
 #include <math.h> // since we use cpp<20
+#include <omp.h> 
 #include "curve.ipp"
 
 
