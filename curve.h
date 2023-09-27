@@ -3,6 +3,7 @@
 #include <tuple>
 
 // not optimized for case z = 0
+template<bool isTransposite = false>
 struct vec3{
 	double x;
 	double y;
@@ -11,8 +12,8 @@ struct vec3{
 
 class Curve{
 public:
-        virtual vec3 point(double t) = 0;
-        virtual vec3 derivative(double t) = 0;
+        virtual vec3<> point(double t) = 0;
+        virtual vec3<true> derivative(double t) = 0;
 
         virtual ~Curve() = default;
 };
@@ -25,8 +26,8 @@ public:
                 }
         };
 
-        vec3 point(double t) override;
-        vec3 derivative(double t) override;
+        vec3<> point(double t) override;
+        vec3<true> derivative(double t) override;
 
 	const double radius(){return m_radius;}
 
@@ -45,8 +46,8 @@ public:
                 }
         };
 
-        vec3 point(double t) override;
-        vec3 derivative(double t) override;
+        vec3<> point(double t) override;
+        vec3<true> derivative(double t) override;
 
 	const double radius1(){return m_radius1;}
 	const double radius2(){return m_radius2;}
@@ -66,8 +67,8 @@ public:
                 }
         };
 
-        vec3 point(double t) override;
-        vec3 derivative(double t) override;
+        vec3<> point(double t) override;
+        vec3<true> derivative(double t) override;
 
 	const double radius(){return m_radius;}
 	const double pitch(){return m_pitch;}
