@@ -4,6 +4,8 @@
 #include <memory>
 #include <algorithm>
 #include <execution>
+#include <charconv>
+#include <cstring>
 #define _USE_MATH_DEFINES 
 #include <math.h> // since we use cpp<20
 #include "curve.ipp"
@@ -109,23 +111,31 @@ void test2(std::vector<T>&& curves, std::vector<U>&& circles){
 }
 
 template<bool isShared>
-void test(){
+void test(size_t size){
 	if constexpr (isShared){
 		test2<isShared>
-			(std::vector<std::shared_ptr<Curve<>>>(128),
+			(std::vector<std::shared_ptr<Curve<>>>(size),
 			 std::vector<std::shared_ptr<Circle<>>>()
 			 );
 	}else{
 		test2<isShared>
-			(std::vector<std::unique_ptr<Curve<>>>(128),
+			(std::vector<std::unique_ptr<Curve<>>>(size),
 			 std::vector<std::unique_ptr<Circle<>>*>() // If we not need autonomous collection
 			);
 	}
 }
 
 
-int main(void){
-	test<true>();
-	test<false>();
+int main(int argc, char **argv){
+	size_t size = 128;
+        if(argc >= 2) {
+                auto [ptr, ec] = std::from_chars(argv[1],argv[1] + std::strlen(argv[1]),size);
+                if (ec != std::errc()){
+                        std::cerr << "this is not a number, using default value\n";
+                }
+        }
+
+	test<true>(size);
+	test<false>(size);
 	return 0;
 }
