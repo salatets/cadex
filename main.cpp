@@ -3,6 +3,7 @@
 #include <iostream>
 #include <memory>
 #include <algorithm>
+#include <execution>
 #define _USE_MATH_DEFINES 
 #include <math.h> // since we use cpp<20
 #include "curve.h"
@@ -42,10 +43,21 @@ int main(void){ // TODO add variant implementation with shared_ptr
 		if(dynamic_cast<Circle*>(curve.get())){
                         circles.push_back(reinterpret_cast<std::unique_ptr<Circle>*>(&curve));
                 }
-
+	}
 	std::sort(circles.begin(), circles.end(),
                         [](auto const r, auto const l)
                         {return (**r) < (**l);});
-	}
+
+	double sum = std::transform_reduce( // parallel computation using Standart Library
+                        std::execution::par,
+                        circles.cbegin(),
+                        circles.cend(),
+                        0.0,
+                        std::plus{},
+                        [](auto circle) {
+                                return (*circle)->radius(); }
+			); // is require additional allocations?
+
+	std::cout << "sum of all circles: " << sum << "\n";
 	return 0;
 }
