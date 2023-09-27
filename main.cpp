@@ -23,9 +23,11 @@ std::unique_ptr<Curve> generate_random(){
         return std::unique_ptr<Curve>(nullptr); // never go here
 }
 
-int main(void){
+int main(void){ // TODO add variant implementation with shared_ptr
 	auto t = M_PI / 4;
 	std::vector<std::unique_ptr<Curve>> curves(128);
+	std::vector<std::unique_ptr<Circle>*> circles; // If we not need autonomous collection
+
 	for(auto& curve : curves){
 		curve = generate_random();
 		// TODO better format
@@ -36,6 +38,9 @@ int main(void){
                         << "," << curve->derivative(t).y
                         << "," << curve->derivative(t).z
                         << "\n";
+		if(dynamic_cast<Circle*>(curve.get())){
+                        circles.push_back(reinterpret_cast<std::unique_ptr<Circle>*>(&curve));
+                }
 	}
 	return 0;
 }
