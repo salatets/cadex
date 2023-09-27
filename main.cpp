@@ -136,7 +136,7 @@ int main(int argc, char **argv){
                 }
         }
 
-	test<true>(size);
+	test<true>(size); // use much more memory
 	test<false>(size);
 	return 0;
 }
