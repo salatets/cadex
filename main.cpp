@@ -58,6 +58,15 @@ int main(void){ // TODO add variant implementation with shared_ptr
                                 return (*circle)->radius(); }
 			); // is require additional allocations?
 
-	std::cout << "sum of all circles: " << sum << "\n";
+	double sumMP = 0.0;
+        auto c_size = circles.size();
+
+        // more overhead compare to manual critical section
+        #pragma omp parallel for reduction (+:sumMP)
+        for(auto i = 0; i < c_size; i++){
+                sumMP += (*circles[i])->radius();
+        }
+
+	std::cout << "sum of all circles: " << sum << " or with openMP: " << sumMP << "\n";
 	return 0;
 }
