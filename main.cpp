@@ -1,5 +1,8 @@
 #include <vector>
 #include <random>
+#include <iostream>
+#define _USE_MATH_DEFINES 
+#include <math.h> // since we use cpp<20
 #include "curve.h"
 
 Curve* generate_random(){
@@ -19,9 +22,18 @@ Curve* generate_random(){
 }
 
 int main(void){
+	auto t = M_PI / 4;
 	std::vector<Curve*> curves(128); // TODO smart pointer
 	for(auto curve : curves){
 		curve = generate_random();
+		// TODO better format
+ 		std::cout << "coord: " << curve->point(t).x
+                        << "," << curve->point(t).y
+                        << "," << curve->point(t).z
+                        << " derive: " << curve->derivative(t).x
+                        << "," << curve->derivative(t).y
+                        << "," << curve->derivative(t).z
+                        << "\n";
 	}
 	return 0;
 }
