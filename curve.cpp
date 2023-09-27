@@ -9,10 +9,10 @@ vec3 Circle::derivative(double t){
 }
 
 vec3 Ellipse::point(double t){
-	return {focus1 * std::cos(t), focus2 * std::sin(t), 0};
+	return {radius1 * std::cos(t), radius2 * std::sin(t), 0};
 }
 vec3 Ellipse::derivative(double t){
-	return {focus1 * -std::sin(t), focus2 * std::cos(t), 0};
+	return {radius1 * -std::sin(t), radius2 * std::cos(t), 0};
 }
 
 vec3 Helix::point(double t){

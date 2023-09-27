@@ -37,8 +37,8 @@ private:
 
 class Ellipse : public Curve{
 public:
-        Ellipse(double focus1, double focus2) : focus1(focus1),focus2(focus2){
-                if(focus1 <= 0 && focus1 <= 0){
+        Ellipse(double radius1, double radius2) : radius1(radius1),radius2(radius2){
+                if(radius1 <= 0 && radius1 <= 0){
                         throw std::invalid_argument("arguments must be positive");
                 }
         };
@@ -47,10 +47,10 @@ public:
         vec3 derivative(double t) override;
 
 	friend bool operator<(const Ellipse& l, const Ellipse& r){
-		return l.focus1+l.focus2 < r.focus1+r.focus2;
+		return l.radius1+l.radius2 < r.radius1+r.radius2;
 	}
 private:
-        double focus1, focus2;
+        double radius1, radius2;
 };
 
 class Helix : public Curve{
