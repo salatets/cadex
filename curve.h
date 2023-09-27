@@ -48,7 +48,7 @@ template<typename T = double>
 class Ellipse : public Curve<T>{
 public:
         Ellipse(T radius1, T radius2) : m_radius1(radius1),m_radius2(radius2){
-                if(m_radius1 <= 0 && m_radius1 <= 0){
+                if(m_radius1 <= 0 && m_radius2 <= 0){
                         throw std::invalid_argument("arguments must be positive");
                 }
         };
