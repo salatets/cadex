@@ -21,6 +21,10 @@ public:
   virtual vec3<T,true> derivative(T t) = 0;
 
   virtual ~Curve() = default;
+  Curve(const Curve&) = default;
+  Curve& operator=(const Curve&) = default;
+  Curve(Curve&&) = default;
+  Curve& operator=(Curve&&) = default;
 };
 
 template<typename T = double>
