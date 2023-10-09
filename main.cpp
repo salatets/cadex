@@ -75,7 +75,7 @@ void test2(std::vector<T>&& curves, std::vector<U>&& circles){
     }
   }
   std::sort(circles.begin(), circles.end(),
-	    [](auto const r, auto const l)
+	    [](const auto& r,const auto& l)
 	    {if constexpr (isShared){
 		return (*r) < (*l);
 	      }else{
@@ -88,7 +88,7 @@ void test2(std::vector<T>&& curves, std::vector<U>&& circles){
 				      circles.cend(),
 				      0.0,
 				      std::plus{},
-				      [](auto circle) {
+				      [](const auto& circle) {
 					if constexpr (isShared){
 					  return circle->radius();
 					}else{
