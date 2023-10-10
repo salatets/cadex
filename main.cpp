@@ -14,7 +14,7 @@
 
 template<bool isShared, typename T, typename... Args>
 auto make_smart(Args&&... args)
--> typename std::conditional_t<
+-> std::conditional_t<
 			       isShared,
 			       std::shared_ptr<T>,
 			       std::unique_ptr<T>>
@@ -26,10 +26,11 @@ auto make_smart(Args&&... args)
 }
 
 template<bool isShared>
-auto generate_random() -> typename std::conditional_t<
-  isShared,
-  std::shared_ptr<Curve<>>,
-  std::unique_ptr<Curve<>>>
+auto generate_random()
+-> std::conditional_t<
+		      isShared,
+		      std::shared_ptr<Curve<>>,
+		      std::unique_ptr<Curve<>>>
 {
   static std::random_device rd;
   static std::mt19937 gen(rd());
