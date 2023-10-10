@@ -39,7 +39,7 @@ public:
   vec3<T> point(T t) override;
   vec3<T,true> derivative(T t) override;
 
-  const T radius(){return m_radius;}
+  const T radius() const {return m_radius;}
 
   friend bool operator<(const Circle& l, const Circle& r){
     return l.m_radius < r.m_radius;
@@ -60,8 +60,8 @@ public:
   vec3<T> point(T t) override;
   vec3<T,true> derivative(T t) override;
 
-  const T radius1(){return m_radius1;}
-  const T radius2(){return m_radius2;}
+  const T radius1() const {return m_radius1;}
+  const T radius2() const {return m_radius2;}
 
   friend bool operator<(const Ellipse& l, const Ellipse& r){
     return l.m_radius1+l.m_radius2 < r.m_radius1+r.m_radius2;
@@ -82,8 +82,8 @@ public:
   vec3<T> point(T t) override;
   vec3<T,true> derivative(T t) override;
 
-  const T radius(){return m_radius;}
-  const T pitch(){return m_pitch;}
+  const T radius() const {return m_radius;}
+  const T pitch() const {return m_pitch;}
 
   friend bool operator<(const Helix& l, const Helix& r){
     return std::tie(l.m_radius,l.m_pitch) < std::tie(r.m_radius,r.m_pitch);
