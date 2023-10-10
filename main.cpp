@@ -59,9 +59,20 @@ void print_curve(Curve<>* const curve, double t){
 	    << "\n";
 }
 
+template<typename> struct is_vector : std::false_type {};
+
+template<typename T,typename A>
+struct is_vector<std::vector<T,A>> : std::true_type {};
+
+template<typename T>
+inline constexpr bool is_vector_v = is_vector<T>::value;
+
 // TODO make dereferences consistant(without if constexpr)
-template<bool isShared, typename T, typename U>
-void test2(std::vector<T>&& curves, std::vector<U>&& circles){
+template<bool isShared, typename Curves, typename Circles,
+	 typename = std::enable_if_t<
+				     is_vector_v<std::remove_reference_t<Curves>> &&
+				     is_vector_v<std::remove_reference_t<Circles>>>>
+void test2(Curves&& curves, Circles&& circles){
   auto t = M_PI / 4;
   for(auto& curve : curves){
     curve = generate_random<isShared>();
@@ -116,10 +127,9 @@ void test2(std::vector<T>&& curves, std::vector<U>&& circles){
 template<bool isShared>
 void test(size_t size){
   if constexpr (isShared){
-    test2<isShared>
-      (std::vector<std::shared_ptr<Curve<>>>(size),
-       std::vector<std::shared_ptr<Circle<>>>()
-       );
+    std::vector<std::shared_ptr<Curve<>>> curves(size);
+    std::vector<std::shared_ptr<Circle<>>> circles;
+    test2<isShared>(curves, circles);
   }else{
     test2<isShared>
       (std::vector<std::unique_ptr<Curve<>>>(size),
