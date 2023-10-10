@@ -1,3 +1,4 @@
+
 #include <vector>
 #include <random>
 #include <iostream>
@@ -62,7 +63,7 @@ template<bool isShared, typename T, typename U>
 void test2(std::vector<T>&& curves, std::vector<U>&& circles){
   auto t = M_PI / 4;
   for(auto& curve : curves){
-    curve = generate_random<false>();
+    curve = generate_random<isShared>();
     print_curve(curve.get(),t);
     if constexpr (isShared){
       if(auto ptr = std::dynamic_pointer_cast<Circle<>>(curve);ptr){
