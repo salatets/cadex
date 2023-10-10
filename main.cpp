@@ -12,6 +12,18 @@
 #include <omp.h> 
 #include "curve.ipp"
 
+template<bool isShared, typename T, typename... Args>
+auto make_smart(Args&&... args)
+-> typename std::conditional_t<
+			       isShared,
+			       std::shared_ptr<T>,
+			       std::unique_ptr<T>>
+{
+    if constexpr (isShared)
+      return std::make_shared<T>(std::forward<Args>(args)...);
+    else
+      return std::make_unique<T>(std::forward<Args>(args)...);
+}
 
 template<bool isShared>
 auto generate_random() -> typename std::conditional_t<
@@ -25,27 +37,15 @@ auto generate_random() -> typename std::conditional_t<
 
   int i = static_cast<int>(dis(gen)) % 3;
   switch(i){
-  case 0:
-    if constexpr (isShared)
-      return std::make_shared<Circle<>>(dis(gen));
-    else
-      return std::make_unique<Circle<>>(dis(gen));
+  case 0:;
+    return make_smart<isShared,Circle<>>(dis(gen));
   case 1:
-    if constexpr (isShared)
-      return std::make_shared<Ellipse<>>(dis(gen),dis(gen));
-    else
-      return std::make_unique<Ellipse<>>(dis(gen),dis(gen));
+    return make_smart<isShared,Ellipse<>>(dis(gen),dis(gen));
   case 2:
-    if constexpr (isShared)
-      return std::make_shared<Helix<>>(dis(gen),dis(gen));
-    else
-      return std::make_unique<Helix<>>(dis(gen),dis(gen));
+    return make_smart<isShared,Helix<>>(dis(gen),dis(gen));
   }
   // never go here
-  if constexpr (isShared)
-    return std::shared_ptr<Curve<>>(nullptr);
-  else
-    return std::unique_ptr<Curve<>>(nullptr);
+  return std::unique_ptr<Curve<>>(nullptr);
 }
 
 void print_curve(Curve<>* const curve, double t){
